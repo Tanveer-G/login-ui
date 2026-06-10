@@ -1,4 +1,14 @@
-const createAccountFields = [
+import type { CreateAccountForm } from "../types/forms";
+
+interface FieldDef {
+  label: string;
+  placeholder: string;
+  required: boolean;
+  type: string;
+  name: keyof CreateAccountForm;   // ✅ restricted to valid keys
+}
+
+export const createAccountFields: FieldDef[] = [
   {
     name: "name",
     label: "Full Name",

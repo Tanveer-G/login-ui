@@ -5,16 +5,16 @@ export interface RadioOption {
   value: string;
 }
 
-export interface RadioGroupFieldProps {
+export interface RadioGroupFieldProps<T extends string = string> {
   label: string;
   name: string;
-  value: string;
-  options: RadioOption[];
+  value: T;
+  options: readonly RadioOption[];
   required?: boolean;
   disabled?: boolean;
   error?: string;
   className?: string;
-  onChange: (value: string) => void;
+  onChange: (value: T) => void;
 }
 
 

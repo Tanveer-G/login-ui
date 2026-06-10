@@ -1,10 +1,8 @@
 import { type ChangeEvent, useState } from "react";
 import { Link } from "react-router-dom";
-
 import createAccountFields from "../constants/formFields";
 import { PATHS } from "../routes/paths";
 import { areFieldsFilled } from "../utils/formValidation";
-
 import { OutlinedField } from "./OutlinedField";
 import RadioGroupField from "./RadioGroupField";
 
@@ -27,28 +25,18 @@ const INITIAL_FORM_DATA: CreateAccountForm = {
 };
 
 const AGENCY_OPTIONS = [
-  {
-    label: "Yes",
-    value: "yes",
-  },
-  {
-    label: "No",
-    value: "no",
-  },
-] as const;
+  { label: "Yes", value: "yes" },
+  { label: "No", value: "no" },
+] as const;                              // keep as const if you like; now supported by RadioGroupField
 
 export default function CreateAccount() {
-  const [formData, setFormData] =
-    useState<CreateAccountForm>(INITIAL_FORM_DATA);
+  const [formData, setFormData] = useState<CreateAccountForm>(INITIAL_FORM_DATA);
 
   const updateField = <K extends keyof CreateAccountForm>(
     field: K,
     value: CreateAccountForm[K]
   ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleInputChange =
@@ -57,10 +45,9 @@ export default function CreateAccount() {
       updateField(field, event.target.value as CreateAccountForm[K]);
     };
 
-  const handleAgencyChange = (
-    value: CreateAccountForm["agency"]
-  ) => {
-    updateField("agency", value);
+  // 👇 widen the type to match RadioGroupField's onChange, but it's still safe
+  const handleAgencyChange = (value: string) => {
+    updateField("agency", value as CreateAccountForm["agency"]);
   };
 
   const isFormValid = areFieldsFilled({
@@ -71,9 +58,7 @@ export default function CreateAccount() {
     companyName: formData.companyName,
   });
 
-  const handleCreateAccount = (
-    event: React.MouseEvent<HTMLAnchorElement>
-  ) => {
+  const handleCreateAccount = (event: React.MouseEvent<HTMLAnchorElement>) => {
     if (!isFormValid) {
       event.preventDefault();
     }
@@ -111,7 +96,7 @@ export default function CreateAccount() {
             name="agency"
             required
             value={formData.agency}
-            onChange={handleAgencyChange}
+            onChange={handleAgencyChange}       // 👈 no type error now
             options={AGENCY_OPTIONS}
           />
         </div>
